@@ -1,0 +1,16 @@
+INPUT(
+./debug\main.o
+./debug\mainwindow.o
+./debug\ray.o
+./debug\camera.o
+./debug\intersection.o
+./debug\transform.o
+./debug\primitive.o
+./debug\scene.o
+./debug\geometry.o
+./debug\smoothblend.o
+./debug\light.o
+./debug\material.o
+./debug\sampler.o
+./debug\moc_mainwindow.o
+);

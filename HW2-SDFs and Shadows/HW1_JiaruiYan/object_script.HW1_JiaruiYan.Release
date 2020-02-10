@@ -1,0 +1,16 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\ray.o
+./release\camera.o
+./release\intersection.o
+./release\transform.o
+./release\primitive.o
+./release\scene.o
+./release\geometry.o
+./release\smoothblend.o
+./release\light.o
+./release\material.o
+./release\sampler.o
+./release\moc_mainwindow.o
+);
