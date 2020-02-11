@@ -73,16 +73,17 @@ void MainWindow::on_pushButton_clicked()
         LambertMaterial air_bubble_mat = LambertMaterial(Color3f(1, 1, 1));
         LambertMaterial refractive_specular2 = LambertMaterial(Color3f(0.15, 1, 0.15));
         LightMaterial emissive_material = LightMaterial(Color3f(1, 1, 1));
+        RandomMaterial rand_material = RandomMaterial(Color3f(0.75, 0.0, 0.75));
 
 
 
         // AreaLight mLight1 = ;
         uPtr<Primitive> primAreaLight = mkU<Primitive>(Primitive());
 
-        uPtr<Shape> lightShapePtr = mkU<SquarePlane>(SquarePlane());
+        uPtr<Shape> lightShapePtr = mkU<Disc>(Disc());
         Transform transLightShape = Transform(Vector3f(0, 3.5, 0), Vector3f(90, 0, 0), Vector3f(2, 2, 1));
         lightShapePtr->mTransform = transLightShape;
-        scene.mLightList.push_back(mkU<AreaLight>(AreaLight(lightShapePtr.get(), Color3f(255, 255, 255))));
+        scene.mLightList.push_back(mkU<AreaLight>(AreaLight(lightShapePtr.get(), LightShape::DISC, Color3f(255, 255, 255))));
         primAreaLight->mUPtrMaterial = mkU<LightMaterial>(emissive_material);
         primAreaLight->mUPtrShape = std::move(lightShapePtr);
         scene.mPrimitiveList.push_back(std::move(primAreaLight));
@@ -159,16 +160,82 @@ void MainWindow::on_pushButton_clicked()
         primSquarePlaneFloor->mUPtrShape->mTransform = squarePlaneTransformFloor;
         scene.mPrimitiveList.push_back(std::move(primSquarePlaneFloor));
 
-        // Sphere:
-        uPtr<Primitive> primShinySphere = mkU<Primitive>(Primitive());
-        Transform transShinySphere = Transform(Vector3f(0, 1, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
-        primShinySphere->mUPtrMaterial = mkU<LambertMaterial>(purple_specular);
 
-        primShinySphere->mName = QString("Shiny Sphere");
-        primShinySphere->mUPtrShape = mkU<Sphere>(Sphere());
-        primShinySphere->mUPtrShape->mTransform = transShinySphere;
-        scene.mPrimitiveList.push_back(std::move(primShinySphere));
+        uPtr<Primitive> primBlend = mkU<Primitive>(Primitive());
+        uPtr<SmoothBlend> mS1S2 = mkU<SmoothBlend>(SmoothBlend());
+        uPtr<SmoothBlend> mS3S4 = mkU<SmoothBlend>(SmoothBlend());
+        uPtr<SmoothBlend> mFinal = mkU<SmoothBlend>(SmoothBlend());
+        mS1S2->mTransform = Transform(Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
+        mS3S4->mTransform = Transform(Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
+        mFinal->mTransform = Transform(Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
 
+        Transform transShinySphere1 = Transform(Vector3f(-0.25f, 1, -0.25f), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
+        Transform transShinySphere2 = Transform(Vector3f(0.25f, 1, -0.25f), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
+        Transform transShinySphere3 = Transform(Vector3f(-0.25f, 1, 0.25f), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
+        Transform transShinySphere4 = Transform(Vector3f(0.25f, 1, 0.25f), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
+
+        uPtr<Sphere> mS1 = mkU<Sphere>(Sphere());
+        uPtr<Sphere> mS2 = mkU<Sphere>(Sphere());
+        uPtr<Sphere> mS3 = mkU<Sphere>(Sphere());
+        uPtr<Sphere> mS4 = mkU<Sphere>(Sphere());
+        mS1->mTransform = transShinySphere1;
+        mS2->mTransform = transShinySphere2;
+        mS3->mTransform = transShinySphere3;
+        mS4->mTransform = transShinySphere4;
+
+        mS1S2->mShape1 = mS1.get();
+        mS1S2->mShape2 = mS2.get();
+        mS3S4->mShape1 = mS3.get();
+        mS3S4->mShape2 = mS4.get();
+        mFinal->mShape1 = mS1S2.get();
+        mFinal->mShape2 = mS3S4.get();
+
+        primBlend->mUPtrMaterial = mkU<RandomMaterial>(rand_material);
+        primBlend->mName = QString("Shiny Blend");
+        primBlend->mUPtrShape = std::move(mFinal);
+        scene.mPrimitiveList.push_back(std::move(primBlend));
+
+        // Sphere1:
+        /*
+        uPtr<Primitive> primShinySphere1 = mkU<Primitive>(Primitive());
+        Transform transShinySphere1 = Transform(Vector3f(-0.25f, 1, -0.25f), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
+        primShinySphere1->mUPtrMaterial = mkU<RandomMaterial>(rand_material);
+
+        primShinySphere1->mName = QString("Shiny Sphere");
+        primShinySphere1->mUPtrShape = mkU<Sphere>(Sphere());
+        primShinySphere1->mUPtrShape->mTransform = transShinySphere1;
+        scene.mPrimitiveList.push_back(std::move(primShinySphere1));
+
+        // Sphere2:
+        uPtr<Primitive> primShinySphere2 = mkU<Primitive>(Primitive());
+        Transform transShinySphere2 = Transform(Vector3f(0.25f, 1, -0.25f), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
+        primShinySphere2->mUPtrMaterial = mkU<RandomMaterial>(rand_material);
+
+        primShinySphere2->mName = QString("Shiny Sphere");
+        primShinySphere2->mUPtrShape = mkU<Sphere>(Sphere());
+        primShinySphere2->mUPtrShape->mTransform = transShinySphere2;
+        scene.mPrimitiveList.push_back(std::move(primShinySphere2));
+
+        // Sphere3:
+        uPtr<Primitive> primShinySphere3 = mkU<Primitive>(Primitive());
+        Transform transShinySphere3 = Transform(Vector3f(-0.25f, 1, 0.25f), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
+        primShinySphere3->mUPtrMaterial = mkU<RandomMaterial>(rand_material);
+
+        primShinySphere3->mName = QString("Shiny Sphere");
+        primShinySphere3->mUPtrShape = mkU<Sphere>(Sphere());
+        primShinySphere3->mUPtrShape->mTransform = transShinySphere3;
+        scene.mPrimitiveList.push_back(std::move(primShinySphere3));
+
+        // Sphere4:
+        uPtr<Primitive> primShinySphere4 = mkU<Primitive>(Primitive());
+        Transform transShinySphere4 = Transform(Vector3f(0.25f, 1, 0.25f), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
+        primShinySphere4->mUPtrMaterial = mkU<RandomMaterial>(rand_material);
+
+        primShinySphere4->mName = QString("Shiny Sphere");
+        primShinySphere4->mUPtrShape = mkU<Sphere>(Sphere());
+        primShinySphere4->mUPtrShape->mTransform = transShinySphere4;
+        scene.mPrimitiveList.push_back(std::move(primShinySphere4));
+        */
         // Disc:
         /*uPtr<Primitive> primDisc = mkU<Primitive>(Primitive());
         Transform transDisc = Transform(Vector3f(0, -2, 0), Vector3f(-90, 0, 0), Vector3f(1, 1, 1));

@@ -9,11 +9,12 @@ PointLight::PointLight(Point3f iP, Color3f iHue)
     mPos = iP;
 }
 
-AreaLight::AreaLight(Shape* iShapePtr, Color3f iHue)
+AreaLight::AreaLight(Shape* iShapePtr, LightShape iLightShape, Color3f iHue)
 {
     mHue = iHue;
     mShapePtr = iShapePtr;
     mPos = iShapePtr->mTransform.mTranslation;
+    mLightShape = iLightShape;
     mSampler = Sampler();
 }
 
@@ -42,7 +43,15 @@ float PointLight::ShadowTest(Opt<Intersection> &iIntersection, Scene &iScene)
 float AreaLight::ShadowTest(std::experimental::optional<Intersection> &iIntersection, Scene &iScene)
 {
     float shadowIntensity = 0.0f;
-    mSampler.generateSampler(100, RANDOM, NONE);
+    if(mLightShape == LightShape::SQUARE)
+    {
+        mSampler.generateSampler(100, STRATIFIED, NONE);
+    }
+    else
+    {
+        mSampler.generateSampler(100, STRATIFIED, DISC_UNIFORM);
+    }
+
     for(int i = 0; i < mSampler.samples.size(); i++)
     {
         // std::cout << mSampler.samples[i].x << " " << mSampler.samples[i].y << " " << mSampler.samples[i].z << std::endl;

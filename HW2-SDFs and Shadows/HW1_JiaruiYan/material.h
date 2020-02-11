@@ -48,4 +48,12 @@ public:
     virtual Color3f GetScatteredColor(Opt<Intersection> &iIntersection, Vector3f iDir, Scene &iScene);
 };
 
+class RandomMaterial : public Material
+{
+public:
+    RandomMaterial(Color3f iBaseColor);
+    ~RandomMaterial(){}
+    virtual Color3f GetScatteredColor(Opt<Intersection> &iIntersection, Vector3f iDir, Scene &iScene);
+};
+
 #endif // MATERIAL_H

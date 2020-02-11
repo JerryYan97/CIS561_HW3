@@ -7,6 +7,10 @@ class Scene;
 class Shape;
 class Transform;
 
+enum LightShape{
+    SQUARE, DISC
+};
+
 class Light
 {
 public:
@@ -30,7 +34,8 @@ class AreaLight:public Light
 public:
     Shape* mShapePtr;
     Sampler mSampler;
-    AreaLight(Shape* iShapePtr, Color3f iHue);
+    LightShape mLightShape;
+    AreaLight(Shape* iShapePtr, LightShape iLightShape, Color3f iHue);
     virtual float ShadowTest(Opt<Intersection>& iIntersection, Scene& iScene);
     ~AreaLight(){}
 };
