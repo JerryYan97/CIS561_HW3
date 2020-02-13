@@ -49,7 +49,7 @@ float AreaLight::ShadowTest(std::experimental::optional<Intersection> &iIntersec
     }
     else
     {
-        mSampler.generateSampler(100, STRATIFIED, DISC_UNIFORM);
+        mSampler.generateSampler(100, RANDOM, DISC_UNIFORM);
     }
 
     for(int i = 0; i < mSampler.samples.size(); i++)

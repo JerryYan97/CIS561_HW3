@@ -12,6 +12,14 @@ Stratified sampling(Square):
 ------------
 ![](./HW2-SDFs_and_Shadows/JiaruiYan_Result/Stratified.png)
 
+Grid sampling(Disc):
+------------
+![](./HW2-SDFs_and_Shadows/JiaruiYan_Result/Disc_Grid.png)
+
+Random sampling(Disc):
+------------
+![](./HW2-SDFs_and_Shadows/JiaruiYan_Result/Disc_Random.png)
+
 Stratified sampling(Disc):
 ------------
 ![](./HW2-SDFs_and_Shadows/JiaruiYan_Result/Disc_Stratified.png)

@@ -161,6 +161,17 @@ void MainWindow::on_pushButton_clicked()
         scene.mPrimitiveList.push_back(std::move(primSquarePlaneFloor));
 
 
+        uPtr<Primitive> primShinySphere4 = mkU<Primitive>(Primitive());
+        Transform transShinySphere4 = Transform(Vector3f(0.f, 1.f, 0.f), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
+        primShinySphere4->mUPtrMaterial = mkU<LambertMaterial>(purple_specular);
+
+        primShinySphere4->mName = QString("Shiny Sphere");
+        primShinySphere4->mUPtrShape = mkU<Sphere>(Sphere());
+        primShinySphere4->mUPtrShape->mTransform = transShinySphere4;
+        scene.mPrimitiveList.push_back(std::move(primShinySphere4));
+
+
+        /*
         uPtr<Primitive> primBlend = mkU<Primitive>(Primitive());
         uPtr<SmoothBlend> mS1S2 = mkU<SmoothBlend>(SmoothBlend());
         uPtr<SmoothBlend> mS3S4 = mkU<SmoothBlend>(SmoothBlend());
@@ -194,7 +205,7 @@ void MainWindow::on_pushButton_clicked()
         primBlend->mName = QString("Shiny Blend");
         primBlend->mUPtrShape = std::move(mFinal);
         scene.mPrimitiveList.push_back(std::move(primBlend));
-
+        */
         // Sphere1:
         /*
         uPtr<Primitive> primShinySphere1 = mkU<Primitive>(Primitive());
